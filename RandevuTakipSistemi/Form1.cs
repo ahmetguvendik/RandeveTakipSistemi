@@ -26,14 +26,20 @@ namespace RandevuTakipSistemi
         private async void button1_Click(object sender, EventArgs e)
         {
             // TextBox'lardan verileri al
-            string name = textBox1.Text;
-            string phone = textBox2.Text;
+            string name = textBox3.Text;
+            string phone = textBox1.Text;
+            double sessionPrice = double.Parse(textBox2.Text);
+            double totalDebt = sessionPrice * 4; // Toplam borç hesapla
 
             // Firestore'a eklenecek veri
             var user = new
             {
                 Name = name,
-                Phone = phone
+                Phone = phone,
+                SessionPrice = sessionPrice,
+                TotalDebt = totalDebt,
+                Appointments = new List<object>() // Randevuları tutacak liste
+
             };
 
             // Firestore'a veri ekle

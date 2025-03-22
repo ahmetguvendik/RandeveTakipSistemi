@@ -4,5 +4,17 @@
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="HomePage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="KullaniciListeleme.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="RandevuAtama.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="RandevuGuncelleme.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

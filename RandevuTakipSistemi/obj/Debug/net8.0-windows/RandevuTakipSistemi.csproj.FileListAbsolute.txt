@@ -41,3 +41,7 @@ C:\Users\ahmet\source\repos\RandevuTakipSistemi\RandevuTakipSistemi\obj\Debug\ne
 C:\Users\ahmet\source\repos\RandevuTakipSistemi\RandevuTakipSistemi\obj\Debug\net8.0-windows\RandevuTakipSistemi.pdb
 C:\Users\ahmet\source\repos\RandevuTakipSistemi\RandevuTakipSistemi\obj\Debug\net8.0-windows\RandevuTakipSistemi.genruntimeconfig.cache
 C:\Users\ahmet\source\repos\RandevuTakipSistemi\RandevuTakipSistemi\obj\Debug\net8.0-windows\ref\RandevuTakipSistemi.dll
+C:\Users\ahmet\source\repos\RandevuTakipSistemi\RandevuTakipSistemi\obj\Debug\net8.0-windows\RandevuTakipSistemi.HomePage.resources
+C:\Users\ahmet\source\repos\RandevuTakipSistemi\RandevuTakipSistemi\obj\Debug\net8.0-windows\RandevuTakipSistemi.RandevuAtama.resources
+C:\Users\ahmet\source\repos\RandevuTakipSistemi\RandevuTakipSistemi\obj\Debug\net8.0-windows\RandevuTakipSistemi.RandevuGuncelleme.resources
+C:\Users\ahmet\source\repos\RandevuTakipSistemi\RandevuTakipSistemi\obj\Debug\net8.0-windows\RandevuTakipSistemi.KullaniciListeleme.resources
