@@ -36,6 +36,7 @@
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
+            button1 = new Button();
             SuspendLayout();
             // 
             // cmbUsers
@@ -111,11 +112,22 @@
             label4.TabIndex = 7;
             label4.Text = "Randevu Tarihleri";
             // 
+            // button1
+            // 
+            button1.Location = new Point(552, 194);
+            button1.Name = "button1";
+            button1.Size = new Size(148, 23);
+            button1.TabIndex = 8;
+            button1.Text = "Randevuyu Sil";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // RandevuGuncelleme
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button1);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -141,5 +153,6 @@
         private Label label2;
         private Label label3;
         private Label label4;
+        private Button button1;
     }
 }

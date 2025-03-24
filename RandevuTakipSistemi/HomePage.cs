@@ -42,6 +42,12 @@ namespace RandevuTakipSistemi
 
         private async void button5_Click(object sender, EventArgs e)
         {
+            updateRandevu();
+
+        }
+
+        private async void updateRandevu()
+        {
             CollectionReference usersRef = db.Collection("users");
             QuerySnapshot usersSnapshot = await usersRef.GetSnapshotAsync();
 
@@ -69,7 +75,7 @@ namespace RandevuTakipSistemi
                         appointment["IsCompleted"] = true;
 
                         // Toplam borçtan seans ücretini düş
-                        double seansUcreti = (double)user["SessionPrice"];
+                        double seansUcreti = Convert.ToDouble(user["SessionPrice"]);
                         double toplamBorc = (double)user["TotalDebt"];
 
                         if (toplamBorc >= seansUcreti)
@@ -93,13 +99,17 @@ namespace RandevuTakipSistemi
                 // Güncelleme yapıldığını bildir
                 MessageBox.Show($"{user["Name"]} için randevular güncellendi!");
             }
-
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             KullaniciListeleme kullaniciListeleme = new KullaniciListeleme();
             kullaniciListeleme.Show();
+        }
+
+        private void HomePage_Load(object sender, EventArgs e)
+        {
+            updateRandevu();
         }
     }
 }

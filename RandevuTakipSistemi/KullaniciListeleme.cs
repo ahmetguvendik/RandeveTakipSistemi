@@ -66,7 +66,7 @@ namespace RandevuTakipSistemi
                 textBoxTotalDebt.Text = user["TotalDebt"].ToString();
                 textBoxPaidAmount.Text = user["SessionPrice"].ToString();
                 // Seans ücretini al
-                double seansUcreti = (double)user["SessionPrice"];
+                double seansUcreti = Convert.ToDouble(user["SessionPrice"]);
 
                 // Tamamlanan randevuları say
                 var appointments = (List<object>)user["Appointments"];

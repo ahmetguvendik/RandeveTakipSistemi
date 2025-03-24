@@ -24,19 +24,56 @@ namespace RandevuTakipSistemi
 
         private async void btnAddAppointment_Click(object sender, EventArgs e)
         {
-            string userId = cmbUsers.SelectedValue.ToString(); // Seçilen kullanıcının ID'si
-            DateTime appointmentDate = dtpAppointmentDate.Value; // Seçilen tarih
-
-            var appointment = new
+            if (cmbUsers.SelectedValue == null)
             {
-                Date = appointmentDate.ToString("dd.MM.yyyy HH:mm"),
-                IsCompleted = false
+                MessageBox.Show("Lütfen bir kullanıcı seçin!");
+                return;
+            }
+
+            try
+            {
+                string userId = cmbUsers.SelectedValue.ToString();
+                DateTime appointmentDate = dtpAppointmentDate.Value;
+
+                // Kullanıcı verilerini getir
+                DocumentReference userRef = db.Collection("users").Document(userId);
+                DocumentSnapshot userSnapshot = await userRef.GetSnapshotAsync();
+
+                if (userSnapshot.Exists)
+                {
+                    var user = userSnapshot.ConvertTo<Dictionary<string, object>>();
+                    double sessionPrice = Convert.ToDouble(user["SessionPrice"]);
+                    var appointments = user.ContainsKey("Appointments") ?
+                        (List<object>)user["Appointments"] :
+                        new List<object>();
+
+                    // Yeni randevu oluştur
+                    var newAppointment = new Dictionary<string, object>
+            {
+                { "Date", appointmentDate.ToString("dd.MM.yyyy HH:mm") },
+                { "IsCompleted", false }
             };
 
-            // Firestore'a randevu ekle
-            DocumentReference userRef = db.Collection("users").Document(userId);
-            await userRef.UpdateAsync("Appointments", FieldValue.ArrayUnion(appointment));
-            MessageBox.Show("Randevu başarıyla eklendi!");
+                    // Randevuyu listeye ekle
+                    appointments.Add(newAppointment);
+
+                    // Toplam borcu güncelle (randevu sayısı x seans ücreti)
+                    double newTotalDebt = appointments.Count * sessionPrice;
+
+                    // Firestore'da güncelleme yap
+                    await userRef.UpdateAsync(new Dictionary<string, object>
+            {
+                { "Appointments", appointments },
+                { "TotalDebt", newTotalDebt }
+            });
+
+                    MessageBox.Show($"Randevu eklendi!\nToplam randevu: {appointments.Count}\nGüncel borç: {newTotalDebt} TL");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Randevu eklenirken hata oluştu: " + ex.Message);
+            }
         }
 
         private async void LoadUsers()

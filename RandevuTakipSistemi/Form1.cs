@@ -29,7 +29,7 @@ namespace RandevuTakipSistemi
             string name = textBox3.Text;
             string phone = textBox1.Text;
             double sessionPrice = double.Parse(textBox2.Text);
-            double totalDebt = sessionPrice * 4; // Toplam borç hesapla
+            double totalDebt = 0; // Toplam borç hesapla
 
             // Firestore'a eklenecek veri
             var user = new

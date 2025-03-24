@@ -24,7 +24,7 @@ namespace RandevuTakipSistemi
         {
             // Uygulama açıldığında randevuları kontrol et
 
-    
+
             MessageBox.Show("Randevular kontrol edildi!" + DateTime.Now);
         }
 
@@ -228,6 +228,72 @@ namespace RandevuTakipSistemi
         private void lstAppointments_DoubleClick(object sender, EventArgs e)
         {
 
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            if (cmbUsers.SelectedValue == null || lstAppointments.SelectedIndex == -1)
+            {
+                MessageBox.Show("Lütfen bir kullanıcı ve randevu seçin!");
+                return;
+            }
+
+            try
+            {
+                string userId = cmbUsers.SelectedValue.ToString();
+
+                // Kullanıcının verilerini al
+                DocumentReference userRef = db.Collection("users").Document(userId);
+                DocumentSnapshot userSnapshot = await userRef.GetSnapshotAsync();
+                var user = userSnapshot.ConvertTo<Dictionary<string, object>>();
+
+                // Appointments kontrolü
+                if (user.ContainsKey("Appointments") && user["Appointments"] is List<object> appointmentsList)
+                {
+                    // Seans ücretini ve toplam borcu al
+                    double sessionPrice = Convert.ToDouble(user["SessionPrice"]);
+                    double totalDebt = Convert.ToDouble(user["TotalDebt"]);
+
+                    // Kullanıcıya silme işlemini onaylat
+                    var confirmResult = MessageBox.Show(
+                        $"Bu randevuyu silmek istediğinize emin misiniz?\n\n" +
+                        $"Toplam borca {sessionPrice} TL silinecek!\n" +
+                        $"Yeni borç: {totalDebt - sessionPrice} TL",
+                        "Randevu Silme",
+                        MessageBoxButtons.YesNo);
+
+                    if (confirmResult == DialogResult.Yes)
+                    {
+                        // Seçili randevuyu listeden kaldır
+                        appointmentsList.RemoveAt(lstAppointments.SelectedIndex);
+
+                        // Toplam borca 1 seans ücreti ekle
+                        totalDebt -= sessionPrice;
+
+                        // Firestore'da güncelle
+                        await userRef.UpdateAsync(new Dictionary<string, object>
+                {
+                    { "Appointments", appointmentsList },
+                    { "TotalDebt", totalDebt }
+                });
+
+                        MessageBox.Show(
+                            $"Randevu başarıyla silindi!\n" +
+                            $"Yeni borç: {totalDebt} TL");
+
+                        // Listeyi yenile
+                        await LoadAppointments(userId);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Kullanıcının randevusu bulunamadı veya randevu listesi geçersiz.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Randevu silinirken bir hata oluştu: " + ex.Message);
+            }
         }
     }
 }

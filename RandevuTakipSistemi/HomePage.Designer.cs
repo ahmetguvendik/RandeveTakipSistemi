@@ -99,7 +99,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(838, 476);
             Controls.Add(button5);
             Controls.Add(button4);
             Controls.Add(button3);
@@ -108,6 +108,7 @@
             Controls.Add(label1);
             Name = "HomePage";
             Text = "HomePage";
+            Load += HomePage_Load;
             ResumeLayout(false);
             PerformLayout();
         }
