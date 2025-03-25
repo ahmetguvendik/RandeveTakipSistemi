@@ -25,7 +25,7 @@ namespace RandevuTakipSistemi
             // Uygulama açıldığında randevuları kontrol et
 
 
-            MessageBox.Show("Randevular kontrol edildi!" + DateTime.Now);
+            
         }
 
         private async Task CheckAppointments()
@@ -163,10 +163,7 @@ namespace RandevuTakipSistemi
                         MessageBox.Show("Kullanıcının randevusu bulunamadı veya randevu listesi geçersiz.");
                     }
                 }
-                else
-                {
-                    MessageBox.Show("Kullanıcı bulunamadı.");
-                }
+           
             }
             catch (Exception ex)
             {

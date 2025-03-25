@@ -97,7 +97,7 @@ namespace RandevuTakipSistemi
                 await usersRef.Document(userDocument.Id).SetAsync(user, SetOptions.MergeAll);
 
                 // Güncelleme yapıldığını bildir
-                MessageBox.Show($"{user["Name"]} için randevular güncellendi!");
+               
             }
         }
 
