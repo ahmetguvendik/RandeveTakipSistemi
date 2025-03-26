@@ -24,55 +24,54 @@ namespace RandevuTakipSistemi
 
         private async void btnAddAppointment_Click(object sender, EventArgs e)
         {
-            if (cmbUsers.SelectedValue == null)
-            {
-                MessageBox.Show("Lütfen bir kullanıcı seçin!");
-                return;
-            }
-
             try
             {
                 string userId = cmbUsers.SelectedValue.ToString();
-                DateTime appointmentDate = dtpAppointmentDate.Value;
-
-                // Kullanıcı verilerini getir
                 DocumentReference userRef = db.Collection("users").Document(userId);
-                DocumentSnapshot userSnapshot = await userRef.GetSnapshotAsync();
+                DocumentSnapshot snapshot = await userRef.GetSnapshotAsync();
 
-                if (userSnapshot.Exists)
+                if (snapshot.Exists)
                 {
-                    var user = userSnapshot.ConvertTo<Dictionary<string, object>>();
+                    var user = snapshot.ConvertTo<Dictionary<string, object>>();
                     double sessionPrice = Convert.ToDouble(user["SessionPrice"]);
+                    double paidAmount = user.ContainsKey("PaidAmount") ? Convert.ToDouble(user["PaidAmount"]) : 0;
+
+                    // Randevuları al
                     var appointments = user.ContainsKey("Appointments") ?
                         (List<object>)user["Appointments"] :
                         new List<object>();
 
-                    // Yeni randevu oluştur
-                    var newAppointment = new Dictionary<string, object>
+                    // YENİ RANDEVU EKLE (Otomatik tamamlanmamış olarak)
+                    appointments.Add(new Dictionary<string, object>
             {
-                { "Date", appointmentDate.ToString("dd.MM.yyyy HH:mm") },
+                { "Date", dtpAppointmentDate.Value.ToString("dd.MM.yyyy HH:mm") },
                 { "IsCompleted", false }
-            };
+            });
 
-                    // Randevuyu listeye ekle
-                    appointments.Add(newAppointment);
+                    // SADECE TAMAMLANMAMIŞ RANDEVULARI SAY
+                    int pendingAppointments = appointments.Count(a =>
+                        !((Dictionary<string, object>)a)["IsCompleted"].Equals(true));
 
-                    // Toplam borcu güncelle (randevu sayısı x seans ücreti)
-                    double newTotalDebt = appointments.Count * sessionPrice;
+                    double newTotalDebt = pendingAppointments * sessionPrice;
+                    double remainingDebt = newTotalDebt - paidAmount;
 
-                    // Firestore'da güncelleme yap
                     await userRef.UpdateAsync(new Dictionary<string, object>
             {
                 { "Appointments", appointments },
-                { "TotalDebt", newTotalDebt }
+                { "TotalDebt", newTotalDebt },
+                { "RemainingDebt", Math.Max(0, remainingDebt) }
             });
 
-                    MessageBox.Show($"Randevu eklendi!\nToplam randevu: {appointments.Count}\nGüncel borç: {newTotalDebt} TL");
+                    MessageBox.Show($"Randevu eklendi!\n" +
+                                  $"Tamamlanmamış randevu: {pendingAppointments}\n" +
+                                  $"Toplam borç: {newTotalDebt} TL\n" +
+                                  $"Ödenen: {paidAmount} TL\n" +
+                                  $"Kalan borç: {remainingDebt} TL");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Randevu eklenirken hata oluştu: " + ex.Message);
+                MessageBox.Show("Hata: " + ex.Message);
             }
         }
 
