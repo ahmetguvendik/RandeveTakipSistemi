@@ -17,7 +17,7 @@ namespace RandevuTakipSistemi
         public RandevuAtama()
         {
             InitializeComponent();
-            FirebaseService firebaseService = new FirebaseService("randevutakipsistemi-24565-firebase-adminsdk-fbsvc-e0c50fa208.json");
+            FirebaseService firebaseService = new FirebaseService("//");
             db = firebaseService.FirestoreDb;
             LoadUsers();
         }
