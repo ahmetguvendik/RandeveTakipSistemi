@@ -17,7 +17,7 @@ namespace RandevuTakipSistemi
         public FirebaseService(string jsonPath)
         {
             // FirebaseApp zaten başlatılmadıysa başlat
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "randevutakipsistemi-24565-firebase-adminsdk-fbsvc-e0c50fa208.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "//");
             if (FirebaseApp.DefaultInstance == null)
             {
                 FirebaseApp.Create(new AppOptions()
@@ -27,7 +27,7 @@ namespace RandevuTakipSistemi
             }
 
             // Firestore bağlantısını kur
-            FirestoreDb = FirestoreDb.Create("randevutakipsistemi-24565");
+            FirestoreDb = FirestoreDb.Create("//");
         }
     }
 
